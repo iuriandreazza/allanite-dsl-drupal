@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function ccm_install(){
+    ccm_enable();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function ccm_uinstall(){
+    ccm_disable();
+}
+
+/**
+ * Implements hook_enable().
+ */
+function ccm_enable() {
+  drupal_install_schema('ccm_migration');
+  // db_insert('node_access')
+  //   ->fields(array(
+  //     'nid' => 0,
+  //     'gid' => 0,
+  //     'realm' => 'all',
+  //     'grant_view' => 1,
+  //     'grant_update' => 0,
+  //     'grant_delete' => 0,
+  //   ))
+  //   ->execute();
+}
+
+/**
+ * Implements hook_disable().
+ */
+function ccm_disable() {
+  drupal_uninstall_schema('ccm_migration');
+}
+
+function ccm_migration_schema() {
+  $schema['ccm_migration_version'] = array(
+    'description' => t('Stores content migration versions for the current project.'),
+    'fields' => array(
+      'tid' => array(
+        'description' => 'The primary identifier.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE
+      ),
+      'version' => array(
+        'description' => 'The machine-readable name of this type.',
+        'type' => 'int',
+        'default' => 0,
+        'not null' => TRUE
+      ),
+      'file_name' => array(
+        'description' => 'Latest file on the migration.',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => ''
+      ),
+      'date_created' => array(
+       'description' => 'A Unix timestamp indicating when the version was runned.',
+       'type' => 'datetime',
+       'mysql_type' => 'datetime',
+       'not null' => TRUE
+      ),
+    ),
+    'indexes' => array(
+      'tdi_ver_idx' => array('tid'),
+    ),
+    'unique keys' => array(
+        'tid' => array('tid'),
+    ),
+    'primary key' => array('tid'),
+  );
+
+  return $schema;
+}

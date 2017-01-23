@@ -1,0 +1,6 @@
+<?php
+
+require_once('includes/ccm_utils.php');
+require_once('includes/iccm_migration.php');
+require_once('includes/ccm_migration.php');
+require_once('includes/ccm.php');

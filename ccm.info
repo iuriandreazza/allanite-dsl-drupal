@@ -1,0 +1,7 @@
+name = Content Code Migration
+description = Migration content feature versioning.
+core = 7.x
+package = Development
+
+
+files[] = ccm.test
