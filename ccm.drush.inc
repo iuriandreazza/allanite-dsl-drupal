@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Module Initialize
+ *
+ * @return array
+ */
 function ccm_drush_command() {
   $items = array();
 
@@ -71,7 +76,10 @@ function ccm_drush_command() {
   $items['ccm:add'] = array(
     'description' => dt('add a new  migration to the  project'),
     'arguments' => array(
-      'migration_name' => dt('migration name')
+      'migration_name' => dt('migration name'),
+//      'type' => dt('Type (Page,...)'),
+//      'name' => dt('Name (...)'),
+//      'title' => dt('Title...'),
     ),
     'callback' => 'ccm_migrate_add',
     'required-arguments' => 1,
@@ -144,7 +152,12 @@ function ccm_migrate_reset() {}
 function ccm_migrate_add($migrationName) {
   $ccm = CCM::getInstance();
   $ccm->log("Adding Migration $migrationName", 3);
-  return $ccm->migrate_add($migrationName);
+  $params = array();
+  foreach(array_slice(func_get_args(), 1) as $param){
+      list($key, $value) = explode('=', $param);
+      $params[$key] = $value;
+  }
+  return $ccm->migrate_add($migrationName, $params);
 }
 
 //ccm:migrate:del
